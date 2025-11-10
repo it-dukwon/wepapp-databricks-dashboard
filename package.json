@@ -2,20 +2,6 @@
   "name": "databricks-dashboard-app",
   "version": "1.0.0",
   "description": "Simple web app to embed Databricks dashboard via OAuth iframe",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "axios": "^1.13.2",
-    "dotenv": "^16.6.1",
-    "express": "^4.21.2",
-    "passport": "^0.6.0",
-    "passport-oauth2": "^1.6.1"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "keywords": [
     "databricks",
     "dashboard",
@@ -23,9 +9,37 @@
     "iframe",
     "express"
   ],
-  "author": "GwangMin",
+  "homepage": "https://github.com/it-dukwon/wepapp-databricks-dashboard#readme",
+  "bugs": {
+    "url": "https://github.com/it-dukwon/wepapp-databricks-dashboard/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/it-dukwon/wepapp-databricks-dashboard.git"
+  },
   "license": "MIT",
+  "author": "GwangMin",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@azure/storage-blob": "^12.29.1",
+    "@azure/storage-file-datalake": "^12.28.1",
+    "axios": "^1.13.2",
+    "az": "^0.2.3",
+    "dayjs": "^1.11.19",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "passport": "^0.6.0",
+    "passport-oauth2": "^1.6.1"
+  },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

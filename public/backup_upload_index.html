@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>덕원농장 도축등급관리</title>
-
+  <title>Upload XLS to Databricks</title>
 </head>
 <body>
-  <h1>일자별등판정 xls파일 Upload (upload 후 처리 아직 안만듬)</h1>
+  <h1>Upload XLS File to Databricks Volume</h1>
   <form id="uploadForm" enctype="multipart/form-data">
     <input type="file" name="xlsFile" accept=".xls,.xlsx" required />
     <button type="submit">Upload</button>
@@ -25,11 +24,5 @@
       document.getElementById("status").textContent = result.message;
     });
   </script>
-
-  <h1>대시보드</h1>
-    <iframe
-        src="https://adb-3997551919284009.9.azuredatabricks.net/embed/dashboardsv3/01f0bba8df9b1c0ebcf5dc38714d79aa?o=3997551919284009"
-        width="100%"height="650"frameborder="0"
-    ></iframe>
 </body>
 </html>
