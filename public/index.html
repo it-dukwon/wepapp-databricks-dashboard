@@ -2,117 +2,36 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>덕원농장 도축등급관리</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f5f5f5;
-    }
-
-    #top-section {
-      display: flex;
-      flex-direction: column;
-      padding: 10px 20px;
-      background-color: #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      box-sizing: border-box;
-    }
-
-    .upload-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .upload-row h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      white-space: nowrap;
-    }
-
-    input[type="file"] {
-      padding: 4px;
-    }
-
-    button {
-      padding: 4px 10px;
-      background-color: #007acc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    #status {
-      margin-left: 10px;
-      color: green;
-      font-weight: bold;
-    }
-
-    .dashboard-title {
-      margin: 6px 0 4px 0;
-      font-size: 1.1rem;
-    }
-
-    iframe {
-      width: 100%;
-      border: none;
-      display: block;
-    }
-  </style>
+  <title>덕원농장 위탁장 관리</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Font Awesome 아이콘 불러오기 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 </head>
 <body>
-  <div id="top-section">
-    <div class="upload-row">
-      <h2>📁 일자별 등판정 XLS 파일 업로드</h2>
-      <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="xlsFile" accept=".xls,.xlsx" required />
-        <button type="submit">업로드</button>
-      </form>
-      <p id="status"></p>
+  <div class="main-container">
+    <!-- 최상단 중앙 제목 -->
+    <h1 class="main-title">
+      <img src="images/logo1984.png" alt="덕원농장 위탁장 관리" class="main-logo" />
+    </h1>
+
+    <!-- 하단 아이콘 링크 (detail 폴더로 경로 변경) -->
+    <div class="link-section">
+      <a href="detail/dashboard.html" class="link-item">
+        <i class="fa-solid fa-chart-line fa-3x"></i>
+        <span>종합 대시보드</span>
+      </a>
+      <a href="detail/upload.html" class="link-item">
+        <i class="fa-solid fa-file-arrow-up fa-3x"></i>
+        <span>등판정 업로드</span>
+      </a>
+      <a href="detail/livestock.html" class="link-item">
+        <i class="fa-solid fa-cow fa-3x"></i>
+        <span>사육두수 관리</span>
+      </a>
     </div>
-    <h2 class="dashboard-title">📊 대시보드</h2>
   </div>
-
-  <iframe
-    id="dashboardFrame"
-    src="https://adb-3997551919284009.9.azuredatabricks.net/embed/dashboardsv3/01f0bba8df9b1c0ebcf5dc38714d79aa?o=3997551919284009"
-  ></iframe>
-
-  <script>
-    function resizeDashboard() {
-      const topSection = document.getElementById("top-section");
-      const dashboardFrame = document.getElementById("dashboardFrame");
-
-      const topHeight = topSection.offsetHeight;
-      const windowHeight = window.innerHeight;
-
-      dashboardFrame.style.height = `${windowHeight - topHeight}px`;
-    }
-
-    window.addEventListener("load", resizeDashboard);
-    window.addEventListener("resize", resizeDashboard);
-
-    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const res = await fetch("/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const result = await res.json();
-      document.getElementById("status").textContent = result.message;
-      resizeDashboard();
-    });
-  </script>
 </body>
 </html>

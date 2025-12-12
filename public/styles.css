@@ -1,0 +1,215 @@
+/* 기본 설정 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  text-align: center;
+
+
+  /* 스크롤 제거 */
+  overflow: hidden;
+
+  /* 최소 크기 */
+  min-width: 720px;
+  min-height: 600px;
+
+}
+
+/* 메인 홈 화면 */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* 중앙 정렬 */
+  justify-content: flex-start; /* 화면 상단부터 배치 */
+  height: 100vh;
+}
+
+.main-title {
+  width: 100%;
+  min-height: 300px;         /* 로고 영역 확보 */
+  display: flex;
+  justify-content: center;   /* 로고 가운데 정렬 */
+  align-items: center;       /* 로고 수직 가운데 정렬 */
+}
+
+.main-logo {
+  max-width: 700px;
+  display: inline-block;
+}
+
+.link-section {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+.link-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.link-item:hover {
+  transform: scale(1.1);
+  color: #007acc;
+}
+
+.link-item i {
+  margin-bottom: 12px;
+}
+
+.link-item span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+
+/* detail 페이지 제목 */
+.detail-title {
+  position: absolute;
+  left: 50%;
+  top: 35px;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+
+
+/* detail 페이지 main 자리 */
+#detail-section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+
+/* 대시보드 페이지 */
+.dashboard-title {
+  margin: 0;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+
+/* 업로드 페이지 */
+/* #top-section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+} */
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap; /* 항상 한 줄 유지 */
+}
+
+.upload-row h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+input[type="file"] {
+  padding: 4px;
+}
+
+button {
+  padding: 6px 12px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+#status {
+  margin-left: 10px;
+  color: green;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* iframe 전체 화면 채우기 */
+iframe#dashboardFrame {
+  position: absolute;
+  top: 72px; /* 제목 영역 높이만큼 아래로 */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 72px); /* 제목 제외한 나머지 높이 */
+  border: none;
+}
+
+/* 사육두수 관리 페이지 */
+/* .livestock-title {
+  margin: 0;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+} */
+
+/* 공통 헤더 스타일 */
+.page-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 20px;
+  box-sizing: border-box;
+}
+
+.logo-link {
+  display: inline-block;
+}
+
+.page-logo {
+  height: 48px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+/* 페이지 콘텐츠 간격 보정 */
+/* .page-content {
+  width: 100%;
+  padding: 12px 20px 40px;
+  box-sizing: border-box;
+} */
+
+/* 반응형 조정 */
+@media (max-width: 520px) {
+  .page-header { padding: 10px 12px; }
+  .page-logo { height: 40px; max-width: 160px; }
+  .page-content { padding: 10px 12px 28px; }
+}

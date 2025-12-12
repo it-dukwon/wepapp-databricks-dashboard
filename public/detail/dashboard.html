@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>종합 대시보드</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a href="../index.html" class="logo-link" title="메인으로">
+      <img src="../images/logo_text.png" alt="덕원농장 위탁장 관리" class="page-logo" />
+    </a>
+    <h2 class="detail-title">📊 종합 대시보드</h2>
+  </header>
+
+  <iframe
+    id="dashboardFrame"
+    src="https://adb-3997551919284009.9.azuredatabricks.net/embed/dashboardsv3/01f0bba8df9b1c0ebcf5dc38714d79aa?o=3997551919284009"
+  ></iframe>
+
+  <script>
+    function resizeDashboard() {
+      const topSection = document.getElementById("page-header");
+      const dashboardFrame = document.getElementById("dashboardFrame");
+      const topHeight = topSection ? topSection.offsetHeight : 0;
+      dashboardFrame.style.height = `${window.innerHeight - topHeight}px`;
+    }
+
+    window.addEventListener("load", resizeDashboard);
+    window.addEventListener("resize", resizeDashboard);
+  </script>
+</body>
+</html>
