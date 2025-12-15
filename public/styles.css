@@ -7,55 +7,42 @@ html, body {
   background-color: #f5f5f5;
   color: #333;
   text-align: center;
-
-
-  /* 스크롤 제거 */
-  overflow: hidden;
-
-  /* 최소 크기 */
   min-width: 720px;
   min-height: 600px;
-
 }
 
 /* 메인 홈 화면 */
 .main-container {
   display: flex;
   flex-direction: column;
-  align-items: center;       /* 중앙 정렬 */
-  justify-content: flex-start; /* 화면 상단부터 배치 */
+  align-items: center;
+  justify-content: flex-start;
   height: 100vh;
 }
 
 .main-title {
   width: 100%;
-  min-height: 300px;         /* 로고 영역 확보 */
+  min-height: 300px;
   display: flex;
-  justify-content: center;   /* 로고 가운데 정렬 */
-  align-items: center;       /* 로고 수직 가운데 정렬 */
+  justify-content: center;
+  align-items: center;
 }
 
 .main-logo {
   max-width: 1024px;
-  /* max-width: 100%; */
   min-width: 600px;
   display: inline-block;
 }
 
-.link-section {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  min-height: 150px;
-}
-
+.link-section,
 .link-section2 {
   display: flex;
   justify-content: center;
   gap: 50px;
   flex-wrap: wrap;
 }
+
+.link-section { min-height: 150px; }
 
 .link-item {
   display: flex;
@@ -71,12 +58,12 @@ html, body {
   color: #007acc;
 }
 
-.link-item i {
+.link-item i,
+.link-item .link-img {
   margin-bottom: 12px;
 }
 
 .link-item .link-img {
-  margin-bottom: 12px;
   width: 48px;
   height: 48px;
   display: inline-block;
@@ -86,8 +73,6 @@ html, body {
   font-size: 1rem;
   font-weight: 500;
 }
-
-
 
 /* detail 페이지 제목 */
 .detail-title {
@@ -104,8 +89,6 @@ html, body {
   z-index: 1;
 }
 
-
-
 /* detail 페이지 main 자리 */
 #detail-section {
   display: flex;
@@ -116,7 +99,6 @@ html, body {
   box-sizing: border-box;
 }
 
-
 /* 대시보드 페이지 */
 .dashboard-title {
   margin: 0;
@@ -125,64 +107,6 @@ html, body {
   font-weight: bold;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-
-
-/* 업로드 페이지 */
-/* #top-section {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  box-sizing: border-box;
-} */
-
-.upload-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap; /* 항상 한 줄 유지 */
-}
-
-.upload-row h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-input[type="file"] {
-  padding: 4px;
-}
-
-button {
-  padding: 6px 12px;
-  background-color: #007acc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #005fa3;
-}
-
-/* Delete button style */
-.delete-btn {
-  padding: 4px 8px;
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.delete-btn:hover {
-  background-color: #c9302c;
 }
 
 #status {
@@ -195,22 +119,12 @@ button:hover {
 /* iframe 전체 화면 채우기 */
 iframe#dashboardFrame {
   position: absolute;
-  top: 72px; /* 제목 영역 높이만큼 아래로 */
+  top: 72px;
   left: 0;
   width: 100%;
-  height: calc(100% - 72px); /* 제목 제외한 나머지 높이 */
+  height: calc(100% - 72px);
   border: none;
 }
-
-/* 사육두수 관리 페이지 */
-/* .livestock-title {
-  margin: 0;
-  padding: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-} */
 
 /* 공통 헤더 스타일 */
 .page-header {
@@ -221,9 +135,7 @@ iframe#dashboardFrame {
   box-sizing: border-box;
 }
 
-.logo-link {
-  display: inline-block;
-}
+.logo-link { display: inline-block; }
 
 .page-logo {
   height: 48px;
@@ -232,13 +144,6 @@ iframe#dashboardFrame {
   object-fit: contain;
 }
 
-/* 페이지 콘텐츠 간격 보정 */
-/* .page-content {
-  width: 100%;
-  padding: 12px 20px 40px;
-  box-sizing: border-box;
-} */
-
 /* 반응형 조정 */
 @media (max-width: 520px) {
   .page-header { padding: 10px 12px; }
@@ -246,20 +151,7 @@ iframe#dashboardFrame {
   .page-content { padding: 10px 12px 28px; }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* farms CRUD 테이블 스타일 */
 table {
   font-size: 0.9rem;
   text-align: center;
@@ -274,7 +166,6 @@ th, td {
   text-align: center;
 }
 
-/* Table header row background */
 table thead th {
   background-color: #cfcfcf;
   font-weight: 600;
@@ -291,16 +182,60 @@ input[type="date"] {
   text-align: center;
 }
 
+/* 자동 생성 되는 필드 배경 처리 */
+.readonly { background: #f5f5f5; }
+
+/* 업로드 페이지 */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.upload-row h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+input[type="file"] { padding: 4px; }
+
+
+
+/***** 버튼 *****/
+/* 버튼 스타일 (공통) 기본 파란색 */
 button {
   padding: 4px 8px;
   background-color: #007acc;
   color: white;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
 }
-
 button:hover {
   background-color: #005fa3;
+}
+/* 등록 버튼 (노란색 톤 조정) */
+#add-btn {
+  background-color: #ffc107;
+}
+#add-btn:hover {
+  background-color: #e0a800;
+}
+/* 수정 버튼 (청록색) */
+.edit-btn {
+  background-color: #17a2b8;
+}
+.edit-btn:hover {
+  background-color: #117a8b;
+}
+/* 삭제 버튼 (빨간색) */
+.delete-btn {
+  background-color: #d9534f;
+}
+.delete-btn:hover {
+  background-color: #c9302c;
 }
