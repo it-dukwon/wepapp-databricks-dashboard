@@ -20,27 +20,19 @@ const PORT = process.env.PORT || 3000;
 
 const cors = require('cors');
 
-// CORS 설정: origin을 배열로 처리하거나 필요 시 와일드카드(*) 사용 가능
-// origin에 배열 넣기
 app.use(cors({
   origin: [
+    '*',
     'http://localhost:3000',
     'https://webapp-databricks-dashboard-c7a3fjgmb7d3dnhn.koreacentral-01.azurewebsites.net'
   ],
   credentials: true,
 }));
 
-// CORS Debug용 미들웨어
-// app.use((req, res, next) => {
-//   console.log('CORS Debug - Origin:', req.headers.origin);
-//   next();
-// });
-
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // --- 메인 페이지 & 파일 업로드 ---
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -69,21 +61,18 @@ app.post("/upload", upload.single("xlsFile"), async (req, res) => {
     fs.unlinkSync(filePath);
     res.json({ message: "✅ 업로드 성공!", fileName });
   } catch (err) {
-    console.error("❌ 업로드 실패:", err.message);
+    console.error("❌ 업로드 실패:", err.message || err);
     res.status(500).json({ message: "❌ 업로드 실패" });
   }
 });
 
 // --- Databricks OAuth 토큰 발급 ---
-
 async function getDatabricksToken() {
   if (process.env.DATABRICKS_TOKEN) {
-    // console.log('Using DATABRICKS_TOKEN from environment');
     return process.env.DATABRICKS_TOKEN;
   }
   try {
     const tokenEndpoint = process.env.DATABRICKS_TOKEN_ENDPOINT || "https://accounts.azuredatabricks.net/oauth2/token";
-    // console.log('Requesting token from:', tokenEndpoint);
 
     const response = await axios.post(
       tokenEndpoint,
@@ -95,7 +84,7 @@ async function getDatabricksToken() {
       }),
       { headers: { "Content-Type": "application/x-www-form-urlencoded" }, maxRedirects: 0 }
     );
-    // console.log('Token response status:', response.status);
+
     // console.log('Token response data (partial):', JSON.stringify(response.data).slice(0, 300));
 
     if (response.data && response.data.access_token) {
@@ -107,7 +96,6 @@ async function getDatabricksToken() {
     throw error;
   }
 }
-
 
 // --- Databricks SQL 쿼리 실행 헬퍼 함수 ---
 async function runDatabricksSQL(token, sql) {
@@ -133,8 +121,6 @@ async function runDatabricksSQL(token, sql) {
       const queryOperation = await session.executeStatement(sql, { runAsync: true });
       const result = await queryOperation.fetchAll();
 
-      // console.log("Query result fetched:", result);
-
       await queryOperation.close();
       return result;
     } finally {
@@ -145,18 +131,99 @@ async function runDatabricksSQL(token, sql) {
   }
 }
 
+// --- 유틸 함수들 ---
+function escapeSqlString(s) {
+  if (s === null || s === undefined) return null;
+  return String(s).replace(/'/g, "''");
+}
+
+function sqlDateOrNull(dateStr) {
+  if (!dateStr) return 'NULL';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return 'NULL';
+  return `DATE '${d.toISOString().slice(0,10)}'`;
+}
+
+function toDateInputValue(dateString) {
+  if (!dateString) return '';
+  const d = new Date(dateString);
+  if (isNaN(d)) return '';
+  return d.toISOString().slice(0, 10);
+}
 
 // --- CRUD API: list_farms 테이블 ---
 
 // 모든 농장 조회
 app.get("/api/farms", async (req, res) => {
+  console.log("GET /api/farms 요청 도착");
+
   try {
     const token = await getDatabricksToken();
-    const farms = await runDatabricksSQL(token, "SELECT * FROM dbx_dukwon.auto_dukwon.list_farms");
+    const raw = await runDatabricksSQL(token, "SELECT * FROM dbx_dukwon.auto_dukwon.list_farms ORDER BY `농장ID` ASC;");
 
-    // console.log("Farms from query:", farms);
+    // console.log('/api/farms raw result (sample):', JSON.stringify(raw).slice(0, 1000));
 
-    // farms가 배열 맞으면 이렇게 보내고,
+    let farms = [];
+
+    // 1) [{col:val,...}, ...] 형태
+    if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === 'object' && !Array.isArray(raw[0])) {
+      farms = raw.map(row => ({
+        농장ID: row["농장ID"] ?? row["id"] ?? row["농장_id"] ?? null,
+        농장명: row["농장명"] ?? row["name"] ?? '',
+        지역: row["지역"] ?? row["region"] ?? '',
+        뱃지: row["뱃지"] ?? row["badge"] ?? '',
+        농장주ID: row["농장주ID"] ?? row["ownerId"] ?? null,
+        농장주: row["농장주"] ?? row["owner"] ?? '',
+        사료회사: row["사료회사"] ?? row["feedCompany"] ?? '',
+        관리자ID: row["관리자ID"] ?? row["managerId"] ?? null,
+        관리자: row["관리자"] ?? row["manager"] ?? '',
+        계약상태: row["계약상태"] ?? row["contractStatus"] ?? '',
+        계약시작일: row["계약시작일"] ?? row["contractStart"] ?? null,
+        계약종료일: row["계약종료일"] ?? row["contractEnd"] ?? null,
+      }));
+    }
+    // 2) [[val1,val2,...], ...] 형태 (컬럼 순서를 알고 있을 때)
+    else if (Array.isArray(raw) && raw.length > 0 && Array.isArray(raw[0])) {
+      farms = raw.map(r => ({
+        농장ID: r[0],
+        농장명: r[1],
+        지역: r[2],
+        뱃지: r[3],
+        농장주ID: r[4],
+        농장주: r[5],
+        사료회사: r[6],
+        관리자ID: r[7],
+        관리자: r[8],
+        계약상태: r[9],
+        계약시작일: r[10],
+        계약종료일: r[11],
+      }));
+    }
+    // 3) {columns: [...], rows: [...]} 형태
+    else if (raw && Array.isArray(raw.columns) && Array.isArray(raw.rows)) {
+      const cols = raw.columns.map(c => c.name || c.columnName || c);
+      farms = raw.rows.map(row => {
+        const obj = {};
+        row.forEach((val, idx) => { obj[cols[idx]] = val; });
+        return {
+          농장ID: obj["농장ID"] ?? obj["id"] ?? null,
+          농장명: obj["농장명"] ?? obj["name"] ?? '',
+          지역: obj["지역"] ?? obj["region"] ?? '',
+          뱃지: obj["뱃지"] ?? obj["badge"] ?? '',
+          농장주ID: obj["농장주ID"] ?? obj["ownerId"] ?? null,
+          농장주: obj["농장주"] ?? obj["owner"] ?? '',
+          사료회사: obj["사료회사"] ?? obj["feedCompany"] ?? '',
+          관리자ID: obj["관리자ID"] ?? obj["managerId"] ?? null,
+          관리자: obj["관리자"] ?? obj["manager"] ?? '',
+          계약상태: obj["계약상태"] ?? obj["contractStatus"] ?? '',
+          계약시작일: obj["계약시작일"] ?? obj["contractStart"] ?? null,
+          계약종료일: obj["계약종료일"] ?? obj["contractEnd"] ?? null,
+        };
+      });
+    } else {
+      console.warn('Unknown result shape from Databricks:', typeof raw);
+    }
+
     res.json({ success: true, farms });
   } catch (err) {
     console.error("Get farms error:", err);
@@ -167,84 +234,116 @@ app.get("/api/farms", async (req, res) => {
 // 농장 신규 등록
 app.post("/api/farms", async (req, res) => {
   try {
-    const farm = req.body;
+    const farm = req.body || {};
     const token = await getDatabricksToken();
 
+    const 농장명 = escapeSqlString(farm.농장명) ?? '';
+    const 지역 = escapeSqlString(farm.지역) ?? '';
+    const 뱃지 = escapeSqlString(farm.뱃지) ?? '';
+    const 농장주ID = Number.isFinite(Number(farm.농장주ID)) ? Number(farm.농장주ID) : 'NULL';
+    const 농장주 = escapeSqlString(farm.농장주) ?? '';
+    const 사료회사 = escapeSqlString(farm.사료회사) ?? '';
+    const 관리자ID = Number.isFinite(Number(farm.관리자ID)) ? Number(farm.관리자ID) : 'NULL';
+    const 관리자 = escapeSqlString(farm.관리자) ?? '';
+    const 계약상태 = escapeSqlString(farm.계약상태) ?? '';
+    const 계약시작일 = sqlDateOrNull(farm.계약시작일);
+    const 계약종료일 = sqlDateOrNull(farm.계약종료일);
+
     const sql = `
-      INSERT INTO dbx_dukwon.auto_dukwon.list_farms VALUES (
-        ${farm.관리자ID || 0},
-        '${farm.관리자 || ""}',
-        ${farm.농장ID || 0},
-        '${farm.농장명 || ""}',
-        '${farm.뱃지 || ""}',
-        '${farm.농장주 || ""}',
-        '${farm.지역 || ""}',
-        '${farm.사료회사 || ""}',
-        '${farm.계약상태 || ""}',
-        DATE '${farm.계약시작일 || "1970-01-01"}',
-        DATE '${farm.계약종료일 || "1970-01-01"}'
+      INSERT INTO dbx_dukwon.auto_dukwon.list_farms
+        (\`농장명\`, \`지역\`, \`뱃지\`, \`농장주ID\`, \`농장주\`, \`사료회사\`, \`관리자ID\`, \`관리자\`, \`계약상태\`, \`계약시작일\`, \`계약종료일\`)
+      VALUES (
+        '${농장명}',
+        '${지역}',
+        '${뱃지}',
+        ${농장주ID === 'NULL' ? 'NULL' : 농장주ID},
+        '${농장주}',
+        '${사료회사}',
+        ${관리자ID === 'NULL' ? 'NULL' : 관리자ID},
+        '${관리자}',
+        '${계약상태}',
+        ${계약시작일},
+        ${계약종료일}
       )
     `;
 
+    // console.log('INSERT SQL:', sql.slice(0, 1000));
     await runDatabricksSQL(token, sql);
 
     res.json({ message: "Farm added" });
   } catch (err) {
-    console.error("Add farm error:", err.message);
-    res.status(500).json({ error: err.message });
+    console.error("Add farm error:", err);
+    res.status(500).json({ error: err.message || String(err) });
   }
 });
 
 // 농장 수정 (농장ID 기준)
 app.put("/api/farms/:id", async (req, res) => {
   try {
-    const id = req.params.id;
-    const farm = req.body;
+    const idNum = parseInt(req.params.id, 10);
+    if (Number.isNaN(idNum)) return res.status(400).json({ error: 'Invalid id' });
+
+    const farm = req.body || {};
     const token = await getDatabricksToken();
+
+    const 농장명 = escapeSqlString(farm.농장명) ?? '';
+    const 지역 = escapeSqlString(farm.지역) ?? '';
+    const 뱃지 = escapeSqlString(farm.뱃지) ?? '';
+    const 농장주ID = Number.isFinite(Number(farm.농장주ID)) ? Number(farm.농장주ID) : 'NULL';
+    const 농장주 = escapeSqlString(farm.농장주) ?? '';
+    const 사료회사 = escapeSqlString(farm.사료회사) ?? '';
+    const 관리자ID = Number.isFinite(Number(farm.관리자ID)) ? Number(farm.관리자ID) : 'NULL';
+    const 관리자 = escapeSqlString(farm.관리자) ?? '';
+    const 계약상태 = escapeSqlString(farm.계약상태) ?? '';
+    const 계약시작일 = sqlDateOrNull(farm.계약시작일);
+    const 계약종료일 = sqlDateOrNull(farm.계약종료일);
 
     const sql = `
       UPDATE dbx_dukwon.auto_dukwon.list_farms SET
-        관리자ID = ${farm.관리자ID || 0},
-        관리자 = '${farm.관리자 || ""}',
-        농장명 = '${farm.농장명 || ""}',
-        뱃지 = '${farm.뱃지 || ""}',
-        농장주 = '${farm.농장주 || ""}',
-        지역 = '${farm.지역 || ""}',
-        사료회사 = '${farm.사료회사 || ""}',
-        계약상태 = '${farm.계약상태 || ""}',
-        계약시작일 = DATE '${farm.계약시작일 || "1970-01-01"}',
-        계약종료일 = DATE '${farm.계약종료일 || "1970-01-01"}'
-      WHERE 농장ID = ${id}
+        \`농장명\` = '${농장명}',
+        \`지역\` = '${지역}',
+        \`뱃지\` = '${뱃지}',
+        \`농장주ID\` = ${농장주ID === 'NULL' ? 'NULL' : 농장주ID},
+        \`농장주\` = '${농장주}',
+        \`사료회사\` = '${사료회사}',
+        \`관리자ID\` = ${관리자ID === 'NULL' ? 'NULL' : 관리자ID},
+        \`관리자\` = '${관리자}',
+        \`계약상태\` = '${계약상태}',
+        \`계약시작일\` = ${계약시작일},
+        \`계약종료일\` = ${계약종료일}
+      WHERE \`농장ID\` = ${idNum}
     `;
 
+    // console.log('UPDATE SQL:', sql);
     await runDatabricksSQL(token, sql);
 
     res.json({ message: "Farm updated" });
   } catch (err) {
-    console.error("Update farm error:", err.message);
-    res.status(500).json({ error: err.message });
+    console.error("Update farm error:", err);
+    res.status(500).json({ error: err.message || String(err) });
   }
 });
 
 // 농장 삭제 (농장ID 기준)
 app.delete("/api/farms/:id", async (req, res) => {
   try {
-    const id = req.params.id;
+    const idNum = parseInt(req.params.id, 10);
+    if (Number.isNaN(idNum)) return res.status(400).json({ error: 'Invalid id' });
+
+    const sql = `DELETE FROM dbx_dukwon.auto_dukwon.list_farms WHERE \`농장ID\` = ${idNum}`;
+    // console.log('DELETE SQL:', sql);
+
     const token = await getDatabricksToken();
-
-    const sql = `DELETE FROM dbx_dukwon.auto_dukwon.list_farms WHERE 농장ID = ${id}`;
-
     await runDatabricksSQL(token, sql);
 
     res.json({ message: "Farm deleted" });
   } catch (err) {
-    console.error("Delete farm error:", err.message);
-    res.status(500).json({ error: err.message });
+    console.error("Delete farm error:", err);
+    res.status(500).json({ error: err.message || String(err) });
   }
 });
 
 // --- Databricks SQL 테스트용 간단 API ---
-
 app.get("/api/dbsql", async (req, res) => {
   try {
     const token = await getDatabricksToken();
@@ -281,7 +380,6 @@ app.get("/api/dbsql", async (req, res) => {
 });
 
 // --- iframe 페이지: Databricks Dashboard ---
-
 app.get("/dashboard", (req, res) => {
   res.send(`
     <html>
@@ -300,7 +398,7 @@ app.get("/dashboard", (req, res) => {
 });
 
 // --- 서버 시작 ---
-
 app.listen(PORT, "0.0.0.0", () => {
-  // console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
+
