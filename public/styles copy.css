@@ -1,0 +1,241 @@
+/* 기본 설정 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  text-align: center;
+  min-width: 720px;
+  min-height: 600px;
+}
+
+/* 메인 홈 화면 */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+.main-title {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-logo {
+  max-width: 1024px;
+  min-width: 600px;
+  display: inline-block;
+}
+
+.link-section,
+.link-section2 {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.link-section { min-height: 150px; }
+
+.link-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #008d46;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.link-item:hover {
+  transform: scale(1.1);
+  color: #007acc;
+}
+
+.link-item i,
+.link-item .link-img {
+  margin-bottom: 12px;
+}
+
+.link-item .link-img {
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+
+.link-item span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* detail 페이지 제목 */
+.detail-title {
+  position: absolute;
+  left: 50%;
+  top: 35px;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* detail 페이지 main 자리 */
+#detail-section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+/* 대시보드 페이지 */
+.dashboard-title {
+  margin: 0;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#status {
+  margin-left: 10px;
+  color: green;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* iframe 전체 화면 채우기 */
+iframe#dashboardFrame {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 72px);
+  border: none;
+}
+
+/* 공통 헤더 스타일 */
+.page-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 20px;
+  box-sizing: border-box;
+}
+
+.logo-link { display: inline-block; }
+
+.page-logo {
+  height: 48px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+/* 반응형 조정 */
+@media (max-width: 520px) {
+  .page-header { padding: 10px 12px; }
+  .page-logo { height: 40px; max-width: 160px; }
+  .page-content { padding: 10px 12px 28px; }
+}
+
+/* farms CRUD 테이블 스타일 */
+table {
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  margin: 20px auto;
+  max-width: 100%;
+}
+
+th, td {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+table thead th {
+  background-color: #cfcfcf;
+  font-weight: 600;
+  color: #222;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* 자동 생성 되는 필드 배경 처리 */
+.readonly { background: #f5f5f5; }
+
+/* 업로드 페이지 */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.upload-row h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+input[type="file"] { padding: 4px; }
+
+
+
+/***** 버튼 *****/
+/* 버튼 스타일 (공통) 기본 파란색 */
+button {
+  padding: 4px 8px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+button:hover {
+  background-color: #005fa3;
+}
+/* 등록 버튼 (노란색 톤 조정) */
+#add-btn {
+  background-color: #ffc107;
+}
+#add-btn:hover {
+  background-color: #e0a800;
+}
+/* 수정 버튼 (청록색) */
+.edit-btn {
+  background-color: #17a2b8;
+}
+.edit-btn:hover {
+  background-color: #117a8b;
+}
+/* 삭제 버튼 (빨간색) */
+.delete-btn {
+  background-color: #d9534f;
+}
+.delete-btn:hover {
+  background-color: #c9302c;
+}

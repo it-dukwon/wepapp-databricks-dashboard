@@ -1,85 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>덕원농장 위탁장 관리</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Font Awesome 아이콘 불러오기 -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>덕원농장 관리 시스템</title>
+
+  <link rel="stylesheet" href="./styles.css" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
 </head>
 <body>
-  <div class="main-container">
-    <!-- 최상단 중앙 제목 -->
-    <h1 class="main-title">
-      <img src="images/logo1984.png" alt="덕원농장 위탁장 관리" class="main-logo" />
-    </h1>
+  <div class="page-bg">
+    <main class="shell">
 
-    <!-- https://fontawesome.com/search -->
-    <div class="link-section">
-      <a href="detail/dashboard.html" class="link-item">
-        <i class="fa-solid fa-chart-line fa-3x"></i>
-        <span>종합 대시보드</span>
-      </a>
-      <a href="detail/upload.html" class="link-item">
-        <i class="fa-solid fa-file-arrow-up fa-3x"></i>
-        <span>등판정 업로드</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-cow fa-3x"></i>
-        <span>사육두수 관리</span>
-      </a>
-      <a href="detail/farms.html" class="link-item">
-        <i class="fa-solid fa-house fa-3x"></i>
-        <span>농장 관리</span>
-      </a>
-    </div>
-    
-    <div class="link-section2">
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-person fa-3x"></i>
-        <span>직원 관리</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-truck fa-3x"></i>
-        <span>출하 관리</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-calendar fa-3x"></i>
-        <span>일정 관리</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-clipboard fa-3x"></i>
-        <span>클립보드 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-camera fa-3x"></i>
-        <span>사진 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-envelope fa-3x"></i>
-        <span>이메일 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-folder-open fa-3x"></i>
-        <span>폴더 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-trash fa-3x"></i>
-        <span>쓰레기통 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-cart-shopping fa-3x"></i>
-        <span>쇼핑카트 아이콘</span>
-      </a>
-      <a href="detail/livestock.html" class="link-item">
-        <i class="fa-solid fa-user fa-3x"></i>
-        <span>유저 아이콘</span>
-      </a>
-    </div>
+      <!-- Top Header -->
+      <header class="topbar">
+        <div class="brand">
+          <img class="brand-logo" src="images/logo1984.png" alt="덕원농장 1984" />
+        </div>
+
+        <nav class="nav">
+          <a class="nav-item nav-item--active" href="#">홈</a>
+          <a class="nav-item" href="#">업무관리</a>
+          <a class="nav-item" href="#">자료 업로드</a>
+          <a class="nav-item" href="#">설정</a>
+        </nav>
+
+        <div class="actions">
+          <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="검색" />
+            <button class="mic" type="button" aria-label="음성검색">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+          </div>
+
+          <div class="avatar" title="사용자">
+            <span>🙂</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <h1>덕원농장 관리 시스템</h1>
+            <p>덕원농장의 운영과 관리를 한 곳에서 쉽고 빠르게 관리하세요.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content -->
+      <section class="content">
+
+        <!-- Quick cards row -->
+        <div class="quick-row">
+          <div class="quick-card">
+            <a class="quick-link" href="detail/dashboard.html">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>종합 대시보드</span>
+            </a>
+            <a class="quick-link" href="detail/upload.html">
+              <i class="fa-solid fa-file-arrow-up"></i>
+              <span>등판정 업로드</span>
+            </a>
+            <a class="quick-link" href="detail/livestock.html">
+              <i class="fa-solid fa-cow"></i>
+              <span>사육두수 관리</span>
+            </a>
+          </div>
+
+          <div class="quick-card">
+            <a class="quick-link" href="detail/farms.html">
+              <i class="fa-solid fa-house"></i>
+              <span>농장 관리</span>
+            </a>
+            <a class="quick-link" href="detail/farms.html">
+              <i class="fa-solid fa-house"></i>
+              <span>농장 관리</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Icon grid -->
+        <div class="icon-grid">
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-person"></i><span>직원 관리</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-truck"></i><span>출하 관리</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-calendar"></i><span>일정 관리</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-clipboard"></i><span>클립보드 아이콘</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-envelope"></i><span>이메일 아이콘</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-folder-open"></i><span>폴더 아이콘</span>
+          </a>
+          <a class="grid-item" href="#">
+            <i class="fa-solid fa-trash"></i><span>쓰레기통 아이콘</span>
+          </a>
+
+          <a class="grid-item grid-item--muted" href="#">
+            <i class="fa-solid fa-cart-shopping"></i><span>쇼핑카트 아이콘</span>
+          </a>
+          <a class="grid-item grid-item--muted" href="#">
+            <i class="fa-solid fa-user"></i><span>유저 아이콘</span>
+          </a>
+          <a class="grid-item grid-item--muted" href="#">
+            <i class="fa-solid fa-folder"></i><span>폴더 아이콘</span>
+          </a>
+          <a class="grid-item grid-item--muted" href="#">
+            <i class="fa-solid fa-folder"></i><span>폴더 아이콘</span>
+          </a>
+          <a class="grid-item grid-item--muted" href="#">
+            <i class="fa-solid fa-user"></i><span>유저 아이콘</span>
+          </a>
+        </div>
+
+      </section>
+    </main>
   </div>
 </body>
 </html>
-
