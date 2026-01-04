@@ -265,7 +265,7 @@ app.get("/api/dbsql", async (req, res) => {
 });
 
 // ------------------------------------------------------------
-// iframe 페이지: Databricks Dashboard
+// iframe 페이지: Databricks Dashboard // 단순 테스트용
 // ------------------------------------------------------------
 app.get("/dashboard", (req, res) => {
   res.send(`
